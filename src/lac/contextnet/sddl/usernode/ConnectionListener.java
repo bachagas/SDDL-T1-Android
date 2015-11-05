@@ -1,4 +1,4 @@
-package lac.contextnet.sddl.anode;
+package lac.contextnet.sddl.usernode;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -11,11 +11,10 @@ import lac.cnclib.net.NodeConnection;
 import lac.cnclib.net.NodeConnectionListener;
 import lac.cnclib.sddl.message.ApplicationMessage;
 import lac.cnclib.sddl.serialization.Serialization;
+import lac.contextnet.model.PingObject;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-import com.infopae.model.PingObject;
 
 /**
  * Listener para mensagens do Controlador. 

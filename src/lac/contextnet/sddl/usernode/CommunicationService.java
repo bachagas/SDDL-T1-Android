@@ -1,4 +1,4 @@
-package lac.contextnet.sddl.anode;
+package lac.contextnet.sddl.usernode;
 
 import java.io.Serializable;
 import java.net.InetSocketAddress;
@@ -71,7 +71,7 @@ public class CommunicationService extends Service {
 	private void registerBroadcasts () {
 	
 		IntentFilter filter = new IntentFilter();
-		filter.addAction("lac.contextnet.sddl.anode.broadcastmessage.ActionSendPingMsg");
+		filter.addAction("lac.contextnet.sddl.usernode.broadcastmessage.ActionSendMsg");
 		broadcastManager.registerReceiver(mConnBroadcastReceiver, filter);
 	}
 	
@@ -147,8 +147,8 @@ public class CommunicationService extends Service {
 		public void onReceive(Context c, Intent i) {
 			
 			String action = i.getAction();
-			if (action.equals("lac.contextnet.sddl.anode.broadcastmessage.ActionSendPingMsg")) {
-				Serializable s = i.getSerializableExtra("lac.contextnet.sddl.anode.broadcastmessage.ExtraPingMsg");
+			if (action.equals("lac.contextnet.sddl.usernode.broadcastmessage.ActionSendMsg")) {
+				Serializable s = i.getSerializableExtra("lac.contextnet.sddl.usernode.broadcastmessage.ExtraMsg");
 				
 				ApplicationMessage am = new ApplicationMessage();
 				am.setContentObject(s);

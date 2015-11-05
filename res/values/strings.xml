@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SDDL-PingServiceTest</string>
+    <string name="app_name">SDDL-User mobile node</string>
     
     <!-- Static Elements -->
     <string name="uuid">UUID:</string>
     <string name="ping">Ping!</string>
+    <string name="computer">Computador</string>
+    <string name="lamp">Lâmpada</string>
+    <string name="tv">TV</string>
+    <string name="event1">Evento 1</string>
+    <string name="event2">Evento 2</string>
     <string name="startservice">Start Service!</string>
     <string name="stopservice">Stop Service!</string>
     <string name="ip">IP:</string>

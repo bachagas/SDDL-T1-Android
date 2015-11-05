@@ -69,4 +69,72 @@
         android:layout_below="@id/lyt_servicebtns"
         android:text="@string/ping"/>
 
+    <RelativeLayout android:id="@+id/lyt_controlbtns" 
+       android:orientation="horizontal"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content" 
+       android:layout_below="@id/btn_ping"
+       android:layout_marginTop="12dp" >
+    
+        <RadioGroup
+            android:id="@+id/toggle_group_contexts"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ToggleButton
+                android:id="@+id/btn_computer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:textOff="@string/computer"
+                android:textOn="@string/computer"
+                android:textSize="14sp" />
+
+            <ToggleButton
+                android:id="@+id/btn_lamp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOff="@string/lamp"
+                android:textOn="@string/lamp"
+                android:textSize="14sp" />
+
+            <ToggleButton
+                android:id="@+id/btn_tv"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOff="@string/tv"
+                android:textOn="@string/tv"
+                android:textSize="14sp" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toggle_group_contexts"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true" >
+
+            <Button
+                android:id="@+id/btn_event1"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:orientation="horizontal"
+                android:padding="24dp"
+                android:text="@string/event1" />
+
+         <Button
+             android:id="@+id/btn_event2"
+             android:layout_width="120dp"
+             android:layout_height="120dp"
+             android:orientation="horizontal"
+             android:padding="24dp"
+             android:text="@string/event2" />            
+        </LinearLayout>
+
+    </RelativeLayout>
+
 </RelativeLayout>

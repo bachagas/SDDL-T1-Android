@@ -1,4 +1,4 @@
-package lac.contextnet.sddl.anode;
+package lac.contextnet.sddl.usernode;
 
 import java.util.UUID;
 import android.app.Activity;
@@ -14,10 +14,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.infopae.model.PingObject;
+import android.widget.ToggleButton;
+import lac.contextnet.model.EventObject;
+import lac.contextnet.model.PingObject;
 
 /**
  * MainActivity: This is our application's MainActivity. It consists in 
@@ -43,6 +45,15 @@ public class MainActivity extends Activity {
 	private Button btn_ping;
 	private Button btn_startservice;
 	private Button btn_stopservice;
+	private RadioGroup toggleGroupContexts;
+	private Button btnComputer;
+	private Button btnLamp;
+	private Button btnTv;
+	private Button btnEvent1;
+	private Button btnEvent2;
+	
+	/* App data */
+	private String context = "computer"; //initial context
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +63,75 @@ public class MainActivity extends Activity {
 		/* GUI Elements */
 		txt_uuid = (TextView) findViewById(R.id.txt_uuid);
 		et_ip = (EditText) findViewById(R.id.et_ip);
+		et_ip.setText("192.168.0.144:5500"); //sets initial "default" ip address
 		btn_ping = (Button) findViewById(R.id.btn_ping);
 		btn_startservice = (Button) findViewById(R.id.btn_startservice);
 		btn_stopservice = (Button) findViewById(R.id.btn_stopservice);
+		toggleGroupContexts = (RadioGroup) findViewById(R.id.toggle_group_contexts);
+		btnComputer = (Button) findViewById(R.id.btn_computer);
+		btnLamp = (Button) findViewById(R.id.btn_lamp);
+		btnTv = (Button) findViewById(R.id.btn_tv);
+		btnEvent1 = (Button) findViewById(R.id.btn_event1);
+		btnEvent2 = (Button) findViewById(R.id.btn_event2);
 		txt_uuid.setText(GetUUID(getBaseContext()));
+		
+		/* Change context buttons listener*/
+		OnClickListener contextButtonListener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				for (int j = 0; j < toggleGroupContexts.getChildCount(); j++) {
+	                final ToggleButton view = (ToggleButton) toggleGroupContexts.getChildAt(j);
+	                view.setChecked(view.getId() == v.getId());
+				}
+				if (v.getId() == btnComputer.getId()) {
+					context = "computer";
+				} else if (v.getId() == btnLamp.getId()) {
+					context = "lamp";
+				} else if (v.getId() == btnTv.getId()) {
+					context = "tv";
+				} else {
+					context = "unknown";
+				}
+				Toast.makeText(getBaseContext(), context, Toast.LENGTH_SHORT).show();
+			}
+		};
+		btnComputer.setOnClickListener(contextButtonListener);
+		btnLamp.setOnClickListener(contextButtonListener);
+		btnTv.setOnClickListener(contextButtonListener);
+		
+		/* Events button listener */
+		OnClickListener eventsButtonListener = new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String txt;
+				EventObject newEvent = null;
+				if (v.getId() == btnEvent1.getId()) {
+					txt = "Send event 1";
+					newEvent = new EventObject("#mouse up", context);
+				} else if (v.getId() == btnEvent2.getId()) {
+					txt = "Send event 2";
+					newEvent = new EventObject("#mouse down", context);
+				} else {
+					txt = "Unknown event";
+				}
+				Toast.makeText(getBaseContext(), txt, Toast.LENGTH_SHORT).show();
+				if(!isMyServiceRunning(CommunicationService.class))
+					Toast.makeText(getBaseContext(), getResources().getText(R.string.msg_e_servicenotrunning), Toast.LENGTH_SHORT).show();
+				else
+				{	
+					if (newEvent != null) {
+						/* Calling the SendMsg action to the MsgBroadcastReceiver */
+						Intent i = new Intent(MainActivity.this, CommunicationService.class);
+						i.setAction("lac.contextnet.sddl.usernode.broadcastmessage." + "ActionSendMsg");
+						i.putExtra("lac.contextnet.sddl.usernode.broadcastmessage." + "ExtraMsg", newEvent);
+						LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(i);	
+					}
+				}
+			}
+		};
+		btnEvent1.setOnClickListener(eventsButtonListener);
+		btnEvent2.setOnClickListener(eventsButtonListener);
 		
 		/* Ping Button Listener*/
 		btn_ping.setOnClickListener(new OnClickListener() {
@@ -70,8 +146,8 @@ public class MainActivity extends Activity {
 					
 					/* Calling the SendPingMsg action to the PingBroadcastReceiver */
 					Intent i = new Intent(MainActivity.this, CommunicationService.class);
-					i.setAction("lac.contextnet.sddl.anode.broadcastmessage." + "ActionSendPingMsg");
-					i.putExtra("lac.contextnet.sddl.anode.broadcastmessage." + "ExtraPingMsg", ping);
+					i.setAction("lac.contextnet.sddl.usernode.broadcastmessage." + "ActionSendMsg");
+					i.putExtra("lac.contextnet.sddl.usernode.broadcastmessage." + "ExtraMsg", ping);
 					LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(i);
 				}
 			}

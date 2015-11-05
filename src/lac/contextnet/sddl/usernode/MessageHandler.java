@@ -1,4 +1,4 @@
-package lac.contextnet.sddl.anode;
+package lac.contextnet.sddl.usernode;
 
 import java.io.Serializable;
 
@@ -7,8 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.infopae.model.PingObject;
+import lac.contextnet.model.PingObject;
+import lac.contextnet.sddl.usernode.R;
 
 public class MessageHandler extends Handler {
 	
@@ -36,9 +36,16 @@ public class MessageHandler extends Handler {
 			{
 				Serializable s = msg.getData().getSerializable("package");
 				
+				Toast.makeText(context, s.toString(), Toast.LENGTH_LONG).show();
+				
 				if(s instanceof PingObject)
 				{
 					Toast.makeText(context, ((PingObject) s).toString(), Toast.LENGTH_LONG).show();
+				}
+				if(s instanceof String)
+				{
+					Toast.makeText(context, (String) s, Toast.LENGTH_LONG).show();
+					//TODO: save received messages to a local log
 				}
 				/* Here you can add different treatments to different types of 
 				 * received data if you decide not to do that on the 

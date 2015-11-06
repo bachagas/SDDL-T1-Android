@@ -63,7 +63,9 @@ public class MainActivity extends Activity {
 		/* GUI Elements */
 		txt_uuid = (TextView) findViewById(R.id.txt_uuid);
 		et_ip = (EditText) findViewById(R.id.et_ip);
-		et_ip.setText("192.168.0.144:5500"); //sets initial "default" ip address
+		//sets initial "default" ip address
+		//et_ip.setText("192.168.0.144:5500"); 
+		et_ip.setText("192.168.1.68:5500");
 		btn_ping = (Button) findViewById(R.id.btn_ping);
 		btn_startservice = (Button) findViewById(R.id.btn_startservice);
 		btn_stopservice = (Button) findViewById(R.id.btn_stopservice);
@@ -104,18 +106,13 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				String txt;
 				EventObject newEvent = null;
 				if (v.getId() == btnEvent1.getId()) {
-					txt = "Send event 1";
-					newEvent = new EventObject("#mouse up", context);
+					newEvent = new EventObject("event1", context);
 				} else if (v.getId() == btnEvent2.getId()) {
-					txt = "Send event 2";
-					newEvent = new EventObject("#mouse down", context);
-				} else {
-					txt = "Unknown event";
+					newEvent = new EventObject("event2", context);
 				}
-				Toast.makeText(getBaseContext(), txt, Toast.LENGTH_SHORT).show();
+				if (newEvent != null) Toast.makeText(getBaseContext(), newEvent.toString(), Toast.LENGTH_SHORT).show();
 				if(!isMyServiceRunning(CommunicationService.class))
 					Toast.makeText(getBaseContext(), getResources().getText(R.string.msg_e_servicenotrunning), Toast.LENGTH_SHORT).show();
 				else

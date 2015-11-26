@@ -36,8 +36,9 @@ import lac.contextnet.model.PingObject;
 public class MainActivity extends Activity {
 
 	/* Shared Preferences */
-	private static String uniqueID = null;
+	private static String uniqueID = "f73e71eb-e137-4401-b927-073f0454ad12";
 	private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
+	private static final String PREF_SDDL_SERVER = "PREF_SDDL_SERVER";
 	
 	/* Static Elements */
 	private TextView txt_uuid;
@@ -64,8 +65,7 @@ public class MainActivity extends Activity {
 		txt_uuid = (TextView) findViewById(R.id.txt_uuid);
 		et_ip = (EditText) findViewById(R.id.et_ip);
 		//sets initial "default" ip address
-		//et_ip.setText("192.168.0.144:5500"); 
-		et_ip.setText("192.168.1.68:5500");
+		et_ip.setText(getServerAddress(getBaseContext()));
 		btn_ping = (Button) findViewById(R.id.btn_ping);
 		btn_startservice = (Button) findViewById(R.id.btn_startservice);
 		btn_stopservice = (Button) findViewById(R.id.btn_stopservice);
@@ -163,7 +163,7 @@ public class MainActivity extends Activity {
 					Toast.makeText(getBaseContext(), getResources().getText(R.string.msg_e_invalid_ip), Toast.LENGTH_LONG).show();
 					return;
 				}
-
+				setServerAddress(getBaseContext(), ipPort);
 				IPPort ipPortObj = new IPPort(ipPort);
 				
 				/* Starting the communication service */
@@ -211,5 +211,27 @@ public class MainActivity extends Activity {
 	        }
 	    }
 	    return uniqueID;
+	}
+	
+	public synchronized static String getServerAddress(Context context) {
+    	String addr;
+        SharedPreferences sharedPrefs = context.getSharedPreferences(
+                PREF_SDDL_SERVER, Context.MODE_PRIVATE);
+        addr = sharedPrefs.getString(PREF_SDDL_SERVER, null);
+        if (addr == null) {
+            addr = "192.168.1.104:5555";
+            Editor editor = sharedPrefs.edit();
+            editor.putString(PREF_SDDL_SERVER, addr);
+            editor.commit();
+        }
+	    return addr;
+	}
+	
+	public synchronized static void setServerAddress(Context context, String addr) {
+        SharedPreferences sharedPrefs = context.getSharedPreferences(
+                PREF_SDDL_SERVER, Context.MODE_PRIVATE);
+        Editor editor = sharedPrefs.edit();
+        editor.putString(PREF_SDDL_SERVER, addr);
+        editor.commit();
 	}
 }

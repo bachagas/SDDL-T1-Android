@@ -27,7 +27,8 @@ public class MessageHandler extends Handler {
 		if (msg.getData().getString("status") != null) 
 		{
 			String status = msg.getData().getString("status");
-			
+			Log.d("SDDL", "Handling message=" + msg.getData().toString());
+			//Toast.makeText(context, msg.getData().toString(), Toast.LENGTH_LONG).show();
 			if (status.equals("connected")) 
 				Log.d("SDDL", (String) context.getResources().getText(R.string.msg_d_connected));
 			else if (status.equals("disconnected")) 
@@ -35,24 +36,25 @@ public class MessageHandler extends Handler {
 			else if (status.equals("package")) 
 			{
 				Serializable s = msg.getData().getSerializable("package");
-				
+				Log.d("SDDL", "Package received=" + s.toString());
 				Toast.makeText(context, s.toString(), Toast.LENGTH_LONG).show();
 				
-				if(s instanceof PingObject)
-				{
-					Toast.makeText(context, ((PingObject) s).toString(), Toast.LENGTH_LONG).show();
-				}
-				if(s instanceof String)
-				{
-					Toast.makeText(context, (String) s, Toast.LENGTH_LONG).show();
-					//TODO: save received messages to a local log
+				if(s instanceof PingObject) {
+					PingObject p = (PingObject) s;
+					//Toast.makeText(context, p.toString(), Toast.LENGTH_LONG).show();
+					Log.d("SDDL", "Ping object received=" + p.toString());
 				}
 				/* Here you can add different treatments to different types of 
 				 * received data if you decide not to do that on the 
 				 * NodeConnectionListener */
-			}
-			else
+				if(s instanceof String) {
+					String text = (String) s;
+					Log.d("SDDL", "String object received=" + text);
+					//Example: save received messages to a local log
+				}
+			} else {
 				Log.d("SDDL", status);
+			}
 		}
 	}
 }

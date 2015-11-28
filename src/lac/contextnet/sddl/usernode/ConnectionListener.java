@@ -15,6 +15,7 @@ import lac.contextnet.model.PingObject;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * Listener para mensagens do Controlador. 
@@ -84,13 +85,15 @@ public class ConnectionListener implements NodeConnectionListener {
 	{
 		String className = msg.getContentObject().getClass().getCanonicalName();
 		Serializable s = Serialization.fromJavaByteStream(msg.getContent());
-		
+		Log.d("SDDL", "Message received of class=" + className + " - content=" + s.toString());
 		if (className != null) 
 		{
 			if (className.equals(PingObject.class.getCanonicalName()))
 				handleNewPackage(s);
 			/* Here you can add different treatments to different types of 
 			 * received data, or repass this logic to the handler. */
+			if (className.equals(String.class.getCanonicalName()))
+				handleNewPackage(s);
 		}
 		else 
 		{

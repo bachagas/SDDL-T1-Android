@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,7 +37,7 @@ import lac.contextnet.model.PingObject;
 public class MainActivity extends Activity {
 
 	/* Shared Preferences */
-	private static String uniqueID = "f73e71eb-e137-4401-b927-073f0454ad12";
+	private static String uniqueID = null;
 	private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
 	private static final String PREF_SDDL_SERVER = "PREF_SDDL_SERVER";
 	
@@ -94,7 +95,7 @@ public class MainActivity extends Activity {
 				} else {
 					context = "unknown";
 				}
-				Toast.makeText(getBaseContext(), context, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getBaseContext(), context, Toast.LENGTH_SHORT).show();
 			}
 		};
 		btnComputer.setOnClickListener(contextButtonListener);
@@ -108,16 +109,15 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				EventObject newEvent = null;
 				if (v.getId() == btnEvent1.getId()) {
-					newEvent = new EventObject("event1", context);
+					newEvent = new EventObject("event1", context, uniqueID);
 				} else if (v.getId() == btnEvent2.getId()) {
-					newEvent = new EventObject("event2", context);
+					newEvent = new EventObject("event2", context, uniqueID);
 				}
-				if (newEvent != null) Toast.makeText(getBaseContext(), newEvent.toString(), Toast.LENGTH_SHORT).show();
-				if(!isMyServiceRunning(CommunicationService.class))
+				if (!isMyServiceRunning(CommunicationService.class)) {
 					Toast.makeText(getBaseContext(), getResources().getText(R.string.msg_e_servicenotrunning), Toast.LENGTH_SHORT).show();
-				else
-				{	
+				} else {	
 					if (newEvent != null) {
+						Log.d("MAIN", "Trying to send new event = " + newEvent.toString());
 						/* Calling the SendMsg action to the MsgBroadcastReceiver */
 						Intent i = new Intent(MainActivity.this, CommunicationService.class);
 						i.setAction("lac.contextnet.sddl.usernode.broadcastmessage." + "ActionSendMsg");
@@ -140,7 +140,7 @@ public class MainActivity extends Activity {
 				else
 				{
 					PingObject ping = new PingObject();
-					
+					Log.d("MAIN", "Trying to send ping object = " + ping.toString());
 					/* Calling the SendPingMsg action to the PingBroadcastReceiver */
 					Intent i = new Intent(MainActivity.this, CommunicationService.class);
 					i.setAction("lac.contextnet.sddl.usernode.broadcastmessage." + "ActionSendMsg");
@@ -219,7 +219,7 @@ public class MainActivity extends Activity {
                 PREF_SDDL_SERVER, Context.MODE_PRIVATE);
         addr = sharedPrefs.getString(PREF_SDDL_SERVER, null);
         if (addr == null) {
-            addr = "192.168.1.104:5555";
+            addr = "192.168.1.68:5500";
             Editor editor = sharedPrefs.edit();
             editor.putString(PREF_SDDL_SERVER, addr);
             editor.commit();
